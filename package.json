@@ -47,7 +47,7 @@
   "keywords": [],
   "author": "Joann Ellis <joannpellis@gmail.com>",
   "license": "ISC",
-  "homepage": "https://mscatipilr.github.io/CurrencyConverter/",
+  "homepage": "https://mscatipilr.github.io/CurrencyConverter",
   "devDependencies": {
     "gh-pages": "^6.1.1"
   }
