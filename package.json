@@ -20,7 +20,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "server": "node server.js"
+    "server": "node server.js",
+    "predeploy" : "npm run build",
+    "deploy" : "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -44,5 +46,9 @@
   "main": "index.js",
   "keywords": [],
   "author": "Joann Ellis <joannpellis@gmail.com>",
-  "license": "ISC"
+  "license": "ISC",
+  "homepage": "https://mscatipilr.github.io/CurrencyConverter/",
+  "devDependencies": {
+    "gh-pages": "^6.1.1"
+  }
 }
