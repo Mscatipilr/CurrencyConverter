@@ -1,8 +1,11 @@
+//Call the API data and display on the page
+
 import React, { useState, useEffect } from 'react';
 
 const apiKey = 'fca_live_zQShfWQrEOLoRMMVFjcOTTQIwaJSbbsAVzfBzaqN';
 const baseUrl = 'https://api.freecurrencyapi.com/v1';
 
+// setting variables and useState hooks
 function CurrencyConverter() {
     const [currencies, setCurrencies] = useState([]);
     const [baseCurrency, setBaseCurrency] = useState('');
@@ -13,6 +16,9 @@ function CurrencyConverter() {
     const [favoritePairs, setFavoritePairs] = useState([]);
     const [historicalDate, setHistoricalDate] = useState('2022-01-01');
 
+    /*initializing the component with the necessary data from the API and preparing the 
+    component state to reflect both the available currencies and the user's favorite pairs 
+    when the component first renders.*/   
     useEffect(() => {
         fetch(`${baseUrl}/currencies?apikey=${apiKey}`)
             .then(response => response.json())
@@ -22,6 +28,7 @@ function CurrencyConverter() {
         loadFavoritePairs();
     }, []);
 
+    // async fetch latest exchange rate, user selects base and target currency
     const convertCurrency = () => {
         fetch(`${baseUrl}/latest?apikey=${apiKey}&base_currency=${baseCurrency}&currencies=${targetCurrency}`)
             .then(response => response.json())
@@ -29,6 +36,7 @@ function CurrencyConverter() {
             .catch(error => console.error('Error converting currency:', error));
     };
 
+//use the users input for base and target currency to fetch and display the historical rate, date set above
     const viewHistoricalRates = () => {
         fetch(`${baseUrl}/historical?apikey=${apiKey}&date=${historicalDate}&base_currency=${baseCurrency}&currencies=${targetCurrency}`)
             .then(response => response.json())
@@ -43,6 +51,7 @@ function CurrencyConverter() {
             .catch(error => console.error('Error fetching historical rates:', error));
     };
 
+    //add a new favorite pair to the database
     const saveFavoritePair = () => {
         const favoritePair = `${baseCurrency}/${targetCurrency}`;
         fetch('/favorites', {
@@ -63,7 +72,7 @@ function CurrencyConverter() {
             .then(data => setFavoritePairs(data))
             .catch(error => console.error('Error loading favorite pairs:', error));
     };
-
+//using react to display the webpage with interactive features
     return (
         <div className="converter">
             <label htmlFor="base-currency">Base Currency:</label>

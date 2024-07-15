@@ -1,3 +1,5 @@
+// Use the express app and set up middleware
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
@@ -6,9 +8,19 @@ const { Sequelize, DataTypes } = require('sequelize');
 const app = express();
 const port = process.env.PORT || 3000;
 
+const cors=require("cors");
+const corsOptions ={
+   origin:'*', 
+   credentials:true,            //access-control-allow-credentials:true
+   optionSuccessStatus:200,
+}
+
+app.use(cors(corsOptions))
+
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Connect to the SQLite database and add favorite pairs
 const sequelize = new Sequelize({
     dialect: 'sqlite',
     storage: 'database.sqlite'
@@ -46,6 +58,7 @@ app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
+// Start the server on the specified port or 3000 if not provided.
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
