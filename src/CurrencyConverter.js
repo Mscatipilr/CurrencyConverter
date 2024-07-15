@@ -11,6 +11,7 @@ function CurrencyConverter() {
     const [convertedAmount, setConvertedAmount] = useState('');
     const [historicalRate, setHistoricalRate] = useState('');
     const [favoritePairs, setFavoritePairs] = useState([]);
+    const [historicalDate, setHistoricalDate] = useState('2022-01-01');
 
     useEffect(() => {
         fetch(`${baseUrl}/currencies?apikey=${apiKey}`)
@@ -29,10 +30,16 @@ function CurrencyConverter() {
     };
 
     const viewHistoricalRates = () => {
-        const date = '2022-01-01'; // Example date, you can make this dynamic
-        fetch(`${baseUrl}/historical/${date}?apikey=${apiKey}&base_currency=${baseCurrency}&currencies=${targetCurrency}`)
+        fetch(`${baseUrl}/historical?apikey=${apiKey}&date=${historicalDate}&base_currency=${baseCurrency}&currencies=${targetCurrency}`)
             .then(response => response.json())
-            .then(data => setHistoricalRate(`Historical exchange rate on ${date}: 1 ${baseCurrency} = ${data.data[targetCurrency]} ${targetCurrency}`))
+            .then(data => {
+                const rate = data.data[historicalDate][targetCurrency];
+                if (rate) {
+                    setHistoricalRate(`Historical exchange rate on ${historicalDate}: 1 ${baseCurrency} = ${rate} ${targetCurrency}`);
+                } else {
+                    setHistoricalRate(`No historical exchange rate available for ${historicalDate}.`);
+                }
+            })
             .catch(error => console.error('Error fetching historical rates:', error));
     };
 
@@ -77,6 +84,8 @@ function CurrencyConverter() {
             </select>
             <p>Converted Amount: <span id="converted-amount">{convertedAmount}</span></p>
             <button onClick={convertCurrency}>Convert</button>
+            <label htmlFor="historical-date">Historical Date:</label>
+            <input type="date" id="historical-date" value={historicalDate} onChange={e => setHistoricalDate(e.target.value)} />
             <button onClick={viewHistoricalRates}>View Historical Rates</button>
             <div id="historical-rates-container">{historicalRate}</div>
             <button onClick={saveFavoritePair}>Save Favorite</button>
